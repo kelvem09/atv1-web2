@@ -1,13 +1,7 @@
-import {
-  IsEnum,
-  IsInt,
-  IsNotEmpty,
-  IsString,
-  MaxLength,
-  Min,
-} from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { PartidoEnum } from 'src/core/enums/partidos.enum';
+import { ApiProperty } from "@nestjs/swagger";
+import { IsString, IsNotEmpty, MaxLength, IsEnum, IsInt, Min } from "class-validator";
+import { PartidoEnum } from "src/core/enums/partidos.enum";
+
 
 export class ParlamentarCreateDto {
   @ApiProperty()

@@ -1,29 +1,64 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { PartidoEnum } from "src/core/enums/partidos.enum";
+import { ParlamentarCreateDto } from "./dto/parlamentar-create.dto";
+import { ParlamentarResponseDto } from "./dto/parlamentar-response.dto";
+import { ParlamentarUpdateDto } from "./dto/parlamentar-update.dto";
+import { ParlamentarRepository } from "./parlamentar.repository";
 
-import { Parlamentar } from './entities/parlamentar.entity';
-import { ParlamentarResponseDto } from './dto/parlamentar-response.dto';
-import { ParlamentarCreateDto } from './dto/parlamentar-create.dto';
 
 @Injectable()
 export class ParlamentarService {
-  private readonly parlamentares: Parlamentar[] = [];
-  private nextId = 1;
+  constructor(private readonly parlamentarRepository: ParlamentarRepository) {}
 
   create(dto: ParlamentarCreateDto): ParlamentarResponseDto {
-    const parlamentar: Parlamentar = { id: this.nextId++, ...dto };
-    this.parlamentares.push(parlamentar);
+    const parlamentar = this.parlamentarRepository.save(dto);
     return new ParlamentarResponseDto(parlamentar);
   }
 
   findAll(): ParlamentarResponseDto[] {
-    return this.parlamentares.map(
-      (parlamentar) => new ParlamentarResponseDto(parlamentar),
-    );
+    return this.parlamentarRepository
+      .findAll()
+      .map((parlamentar) => new ParlamentarResponseDto(parlamentar));
   }
 
-  findOne(id: number): ParlamentarResponseDto | null {
-    const parlamentar = this.parlamentares.find((p) => p.id === id);
-    if (!parlamentar) return null;
+  findOne(id: number): ParlamentarResponseDto {
+    const parlamentar = this.parlamentarRepository.findById(id);
+
+    if (!parlamentar) {
+      throw new NotFoundException('Parlamentar não encontrado');
+    }
+
     return new ParlamentarResponseDto(parlamentar);
+  }
+
+  findByPartido(partido: PartidoEnum): ParlamentarResponseDto[] {
+    return this.parlamentarRepository
+      .findByPartido(partido)
+      .map((parlamentar) => new ParlamentarResponseDto(parlamentar));
+  }
+
+  update(id: number, dto: ParlamentarUpdateDto): ParlamentarResponseDto {
+    const atual = this.parlamentarRepository.findById(id);
+
+    if (!atual) {
+      throw new NotFoundException('Parlamentar não encontrado');
+    }
+
+    const atualizado = this.parlamentarRepository.update(id, {
+      nomeCompleto: dto.nomeCompleto ?? atual.nomeCompleto,
+      nomeParlamentar: dto.nomeParlamentar ?? atual.nomeParlamentar,
+      partidoAtual: dto.partidoAtual ?? atual.partidoAtual,
+      numeroVotos: dto.numeroVotos ?? atual.numeroVotos,
+    });
+
+    return new ParlamentarResponseDto(atualizado!);
+  }
+
+  remove(id: number): void {
+    const deleted = this.parlamentarRepository.delete(id);
+
+    if (!deleted) {
+      throw new NotFoundException('Parlamentar não encontrado');
+    }
   }
 }

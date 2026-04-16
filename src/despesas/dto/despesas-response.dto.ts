@@ -1,6 +1,7 @@
 import { CategoriaDespesaEnum } from "src/core/enums/categoriasDespesas.enum";
 import { DespesaEntity } from "../entities/despesas.entity";
 
+
 export class DespesaResponseDto {
   id: number;
   descricao: string;

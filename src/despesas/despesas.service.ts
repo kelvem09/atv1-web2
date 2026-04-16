@@ -1,8 +1,8 @@
 import { Injectable, BadRequestException, NotFoundException } from "@nestjs/common";
 import { CategoriaDespesaEnum } from "src/core/enums/categoriasDespesas.enum";
-import { DespesaResponseDto } from "src/despesas/dto/categorias-response.dto";
 import { DespesaEntity } from "src/despesas/entities/despesas.entity";
 import { DespesasCreateDto } from "./dto/despesas-create.dto";
+import { DespesaResponseDto } from "./dto/despesas-response.dto";
 
 
 @Injectable()

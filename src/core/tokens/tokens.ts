@@ -1,0 +1,1 @@
+export const DESPESA_SERVICE = 'DESPESA_SERVICE';

@@ -1,0 +1,378 @@
+{
+  "info": {
+    "_postman_id": "94a09672-adec-4559-87c4-e5464d43b8f0",
+    "name": "API Parlamentares e Despesas",
+    "_exporter_id": "39541618"
+  },
+  "item": [
+    {
+      "name": "Parlamentares",
+      "item": [
+        {
+          "name": "Criar parlamentar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nomeCompleto\": \"João Carlos da Silva\",\n  \"nomeParlamentar\": \"João da Saúde\",\n  \"partidoAtual\": \"PT\",\n  \"numeroVotos\": 4200\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/parlamentares",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "parlamentares"
+              ]
+            },
+            "description": "Cria um parlamentar. Use esta requisição antes de cadastrar despesas."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar parlamentares",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/parlamentares",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "parlamentares"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar parlamentar por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/parlamentares/{{parlamentarId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "parlamentares",
+                "{{parlamentarId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar parlamentar por partido",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/parlamentares/partido/{{partido}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "parlamentares",
+                "partido",
+                "{{partido}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar parlamentar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroVotos\": 6000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/parlamentares/{{parlamentarId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "parlamentares",
+                "{{parlamentarId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remover parlamentar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/parlamentares/{{parlamentarId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "parlamentares",
+                "{{parlamentarId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Despesas",
+      "item": [
+        {
+          "name": "Criar despesa válida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Abastecimento do veículo oficial\",\n  \"valor\": 1800,\n  \"categoria\": \"COMBUSTIVEL\",\n  \"data\": \"2026-04-15\",\n  \"parlamentarId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/despesas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "despesas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar despesas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/despesas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "despesas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar despesa por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/despesas/{{despesaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "despesas",
+                "{{despesaId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar despesas por categoria",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/despesas/categoria/{{categoria}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "despesas",
+                "categoria",
+                "{{categoria}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar despesas por parlamentar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/despesas/parlamentar/{{parlamentarId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "despesas",
+                "parlamentar",
+                "{{parlamentarId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar despesa",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Divulgação institucional nas redes\",\n  \"valor\": 9000,\n  \"categoria\": \"DIVULGACAO\",\n  \"data\": \"2026-04-16\",\n  \"parlamentarId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/despesas/{{despesaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "despesas",
+                "{{despesaId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remover despesa",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/despesas/{{despesaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "despesas",
+                "{{despesaId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Testes de erro",
+      "item": [
+        {
+          "name": "Erro 404 - parlamentar inexistente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/parlamentares/999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "parlamentares",
+                "999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Erro 404 - despesa inexistente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/despesas/999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "despesas",
+                "999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Erro 400 - combustível acima do limite",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Combustível para veículo oficial\",\n  \"valor\": 2500,\n  \"categoria\": \"COMBUSTIVEL\",\n  \"data\": \"2026-04-15\",\n  \"parlamentarId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/despesas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "despesas"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "parlamentarId",
+      "value": "1"
+    },
+    {
+      "key": "despesaId",
+      "value": "1"
+    },
+    {
+      "key": "partido",
+      "value": "PT"
+    },
+    {
+      "key": "categoria",
+      "value": "COMBUSTIVEL"
+    }
+  ]
+}
