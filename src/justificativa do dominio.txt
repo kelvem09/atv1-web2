@@ -1,0 +1,7 @@
+Justificativa da escolha do domínio
+
+Atualmente, atuo no desenvolvimento de um sistema de ressarcimento de cotas para o exercício da atividade parlamentar na Assembleia Legislativa do Rio Grande do Norte (ALRN). Esse tipo de sistema é responsável por registrar, controlar e ressarcir despesas realizadas pelos gabinetes parlamentares, desde que devidamente justificadas dentro das regras estabelecidas.
+
+A escolha desse domínio para a atividade ocorreu por dois motivos principais. Primeiro, por se tratar de um contexto com o qual já tenho contato profissional direto, o que facilita a compreensão das regras de negócio e dos fluxos envolvidos. Segundo, porque o tema é relevante do ponto de vista administrativo e tecnológico, já que envolve cadastro de parlamentares, lançamento de despesas, validações e controle de informações.
+
+Dessa forma, optei por desenvolver uma versão simplificada desse sistema, adequada ao escopo da atividade, mas ainda capaz de representar conceitos importantes de uma aplicação web, como organização em camadas, validação de dados, regras de negócio e operações de cadastro e consulta.
