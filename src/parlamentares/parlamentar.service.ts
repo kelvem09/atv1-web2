@@ -1,64 +1,68 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { PartidoEnum } from "src/core/enums/partidos.enum";
-import { ParlamentarCreateDto } from "./dto/parlamentar-create.dto";
-import { ParlamentarResponseDto } from "./dto/parlamentar-response.dto";
-import { ParlamentarUpdateDto } from "./dto/parlamentar-update.dto";
-import { ParlamentarRepository } from "./parlamentar.repository";
-
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ParlamentarEntity } from './entities/parlamentar.entity';
+import { ParlamentarCreateDto } from './dto/parlamentar-create.dto';
+import { ParlamentarUpdateDto } from './dto/parlamentar-update.dto';
+import { ParlamentarResponseDto } from './dto/parlamentar-response.dto';
+import { AuditService } from 'src/audit/audit.service';
 
 @Injectable()
 export class ParlamentarService {
-  constructor(private readonly parlamentarRepository: ParlamentarRepository) {}
+  constructor(
+    @InjectRepository(ParlamentarEntity, 'main')
+    private readonly repo: Repository<ParlamentarEntity>,
+    private readonly auditService: AuditService,
+  ) {}
 
-  create(dto: ParlamentarCreateDto): ParlamentarResponseDto {
-    const parlamentar = this.parlamentarRepository.save(dto);
-    return new ParlamentarResponseDto(parlamentar);
+  async create(dto: ParlamentarCreateDto): Promise<ParlamentarResponseDto> {
+    const parlamentar = this.repo.create(dto);
+    const saved = await this.repo.save(parlamentar);
+    await this.auditService.registrarLog('Parlamentar', saved.id, 'CREATE');
+    return new ParlamentarResponseDto(saved);
   }
 
-  findAll(): ParlamentarResponseDto[] {
-    return this.parlamentarRepository
-      .findAll()
-      .map((parlamentar) => new ParlamentarResponseDto(parlamentar));
+  async findAll(): Promise<ParlamentarResponseDto[]> {
+    const list = await this.repo
+      .createQueryBuilder('p')
+      .leftJoinAndSelect('p.comissoes', 'c')
+      .getMany();
+    return list.map((p) => new ParlamentarResponseDto(p));
   }
 
-  findOne(id: number): ParlamentarResponseDto {
-    const parlamentar = this.parlamentarRepository.findById(id);
-
+  async findOne(id: number): Promise<ParlamentarResponseDto> {
+    const parlamentar = await this.repo.findOne({
+      where: { id },
+      relations: ['comissoes'],
+    });
     if (!parlamentar) {
       throw new NotFoundException('Parlamentar não encontrado');
     }
-
     return new ParlamentarResponseDto(parlamentar);
   }
 
-  findByPartido(partido: PartidoEnum): ParlamentarResponseDto[] {
-    return this.parlamentarRepository
-      .findByPartido(partido)
-      .map((parlamentar) => new ParlamentarResponseDto(parlamentar));
-  }
-
-  update(id: number, dto: ParlamentarUpdateDto): ParlamentarResponseDto {
-    const atual = this.parlamentarRepository.findById(id);
-
-    if (!atual) {
+  async update(
+    id: number,
+    dto: ParlamentarUpdateDto,
+  ): Promise<ParlamentarResponseDto> {
+    const parlamentar = await this.repo.findOneBy({ id });
+    if (!parlamentar) {
       throw new NotFoundException('Parlamentar não encontrado');
     }
-
-    const atualizado = this.parlamentarRepository.update(id, {
-      nomeCompleto: dto.nomeCompleto ?? atual.nomeCompleto,
-      nomeParlamentar: dto.nomeParlamentar ?? atual.nomeParlamentar,
-      partidoAtual: dto.partidoAtual ?? atual.partidoAtual,
-      numeroVotos: dto.numeroVotos ?? atual.numeroVotos,
-    });
-
-    return new ParlamentarResponseDto(atualizado!);
+    Object.assign(parlamentar, dto);
+    const saved = await this.repo.save(parlamentar);
+    await this.auditService.registrarLog('Parlamentar', saved.id, 'UPDATE');
+    return new ParlamentarResponseDto(saved);
   }
 
-  remove(id: number): void {
-    const deleted = this.parlamentarRepository.delete(id);
-
-    if (!deleted) {
+  async remove(id: number): Promise<{ message: string }> {
+    const parlamentar = await this.repo.findOneBy({ id });
+    if (!parlamentar) {
       throw new NotFoundException('Parlamentar não encontrado');
     }
+    const removedId = parlamentar.id;
+    await this.repo.remove(parlamentar);
+    await this.auditService.registrarLog('Parlamentar', removedId, 'DELETE');
+    return { message: 'Parlamentar removido com sucesso' };
   }
 }

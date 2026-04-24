@@ -1,16 +1,22 @@
-import { Controller, Inject, Post, Body, Get, Param, ParseEnumPipe, ParseIntPipe, Put, Delete } from "@nestjs/common";
-import { CategoriaDespesaEnum } from "src/core/enums/categoriasDespesas.enum";
-import { DESPESA_SERVICE } from "src/core/tokens/tokens";
-import { DespesaUpdateDto } from "./dto/despesas-update.dto";
-import type { IDespesaService } from "./interfaces/despesa-service.interface";
-import { DespesasCreateDto } from "./dto/despesas-create.dto";
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  ParseIntPipe,
+  ParseEnumPipe,
+  Put,
+  Delete,
+} from '@nestjs/common';
+import { DespesasCreateDto } from './dto/despesas-create.dto';
+import { DespesaUpdateDto } from './dto/despesas-update.dto';
+import { DespesaService } from './despesas.service';
+import { CategoriaDespesaEnum } from 'src/core/enums/categoriasDespesas.enum';
 
 @Controller('despesas')
 export class DespesaController {
-  constructor(
-    @Inject(DESPESA_SERVICE)
-    private readonly despesaService: IDespesaService,
-  ) {}
+  constructor(private readonly despesaService: DespesaService) {}
 
   @Post()
   create(@Body() dto: DespesasCreateDto) {
@@ -22,6 +28,11 @@ export class DespesaController {
     return this.despesaService.findAll();
   }
 
+  @Get('somatorio')
+  sumByParlamentar() {
+    return this.despesaService.sumByParlamentar();
+  }
+
   @Get('categoria/:categoria')
   findByCategoria(
     @Param('categoria', new ParseEnumPipe(CategoriaDespesaEnum))
@@ -30,16 +41,9 @@ export class DespesaController {
     return this.despesaService.findByCategoria(categoria);
   }
 
-  @Get('parlamentar/:parlamentarId')
-  findByParlamentarId(
-    @Param('parlamentarId', ParseIntPipe) parlamentarId: number,
-  ) {
-    return this.despesaService.findByParlamentarId(parlamentarId);
-  }
-
   @Get(':id')
-  findById(@Param('id', ParseIntPipe) id: number) {
-    return this.despesaService.findById(id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.despesaService.findOne(id);
   }
 
   @Put(':id')
@@ -52,7 +56,6 @@ export class DespesaController {
 
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
-    this.despesaService.remove(id);
-    return { message: 'Despesa removida com sucesso' };
+    return this.despesaService.remove(id);
   }
 }

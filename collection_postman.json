@@ -1,7 +1,9 @@
 {
   "info": {
-    "_postman_id": "94a09672-adec-4559-87c4-e5464d43b8f0",
-    "name": "API Parlamentares e Despesas",
+    "_postman_id": "6ff40e9f-1593-4511-9901-634a007408b1",
+    "name": "Sistema de Gestão de Despesas Parlamentares com Auditoria",
+    "description": "Collection atualizada para testar os fluxos principais de criação e consulta da API NestJS com parlamentares, comissões, despesas e auditoria.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "39541618"
   },
   "item": [
@@ -10,6 +12,20 @@
       "item": [
         {
           "name": "Criar parlamentar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response && response.id) {",
+                  "  pm.collectionVariables.set(\"parlamentarId\", String(response.id));",
+                  "}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -31,7 +47,7 @@
                 "parlamentares"
               ]
             },
-            "description": "Cria um parlamentar. Use esta requisição antes de cadastrar despesas."
+            "description": "Cria um parlamentar e salva o id retornado na variável parlamentarId."
           },
           "response": []
         },
@@ -53,7 +69,7 @@
           "response": []
         },
         {
-          "name": "Buscar parlamentar por ID",
+          "name": "Buscar parlamentar por id",
           "request": {
             "method": "GET",
             "header": [],
@@ -65,25 +81,6 @@
               "path": [
                 "parlamentares",
                 "{{parlamentarId}}"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Buscar parlamentar por partido",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/parlamentares/partido/{{partido}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "parlamentares",
-                "partido",
-                "{{partido}}"
               ]
             }
           },
@@ -112,7 +109,8 @@
                 "parlamentares",
                 "{{parlamentarId}}"
               ]
-            }
+            },
+            "description": "Atualiza parcialmente um parlamentar."
           },
           "response": []
         },
@@ -137,10 +135,24 @@
       ]
     },
     {
-      "name": "Despesas",
+      "name": "Comissões",
       "item": [
         {
-          "name": "Criar despesa válida",
+          "name": "Criar comissão",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response && response.id) {",
+                  "  pm.collectionVariables.set(\"comissaoId\", String(response.id));",
+                  "}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -151,7 +163,133 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"descricao\": \"Abastecimento do veículo oficial\",\n  \"valor\": 1800,\n  \"categoria\": \"COMBUSTIVEL\",\n  \"data\": \"2026-04-15\",\n  \"parlamentarId\": 1\n}"
+              "raw": "{\n  \"nome\": \"Comissão de Constituição e Justiça\",\n  \"sigla\": \"CCJ\",\n  \"tema\": \"Análise constitucional e jurídica\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/comissoes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comissoes"
+              ]
+            },
+            "description": "Cria uma comissão e salva o id retornado na variável comissaoId."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar comissões",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/comissoes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comissoes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar comissão por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/comissoes/{{comissaoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comissoes",
+                "{{comissaoId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar comissão",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tema\": \"Análise constitucional, jurídica e regimental\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/comissoes/{{comissaoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comissoes",
+                "{{comissaoId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remover comissão",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/comissoes/{{comissaoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comissoes",
+                "{{comissaoId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Despesas",
+      "item": [
+        {
+          "name": "Criar despesa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response && response.id) {",
+                  "  pm.collectionVariables.set(\"despesaId\", String(response.id));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Abastecimento do veículo oficial\",\n  \"valor\": 1800,\n  \"categoria\": \"COMBUSTIVEL\",\n  \"data\": \"2026-04-25\",\n  \"parlamentarId\": {{parlamentarId}}\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/despesas",
@@ -161,7 +299,8 @@
               "path": [
                 "despesas"
               ]
-            }
+            },
+            "description": "Cria uma despesa ligada ao parlamentar criado e salva o id retornado na variável despesaId."
           },
           "response": []
         },
@@ -183,7 +322,7 @@
           "response": []
         },
         {
-          "name": "Buscar despesa por ID",
+          "name": "Buscar despesa por id",
           "request": {
             "method": "GET",
             "header": [],
@@ -220,25 +359,6 @@
           "response": []
         },
         {
-          "name": "Buscar despesas por parlamentar",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/despesas/parlamentar/{{parlamentarId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "despesas",
-                "parlamentar",
-                "{{parlamentarId}}"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "Atualizar despesa",
           "request": {
             "method": "PUT",
@@ -250,7 +370,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"descricao\": \"Divulgação institucional nas redes\",\n  \"valor\": 9000,\n  \"categoria\": \"DIVULGACAO\",\n  \"data\": \"2026-04-16\",\n  \"parlamentarId\": 1\n}"
+              "raw": "{\n  \"descricao\": \"Divulgação institucional nas redes\",\n  \"valor\": 9000,\n  \"categoria\": \"DIVULGACAO\",\n  \"data\": \"2026-04-26\",\n  \"parlamentarId\": {{parlamentarId}}\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/despesas/{{despesaId}}",
@@ -261,7 +381,8 @@
                 "despesas",
                 "{{despesaId}}"
               ]
-            }
+            },
+            "description": "Atualiza parcialmente a despesa existente."
           },
           "response": []
         },
@@ -280,6 +401,30 @@
                 "{{despesaId}}"
               ]
             }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auditoria",
+      "item": [
+        {
+          "name": "Listar logs de auditoria",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/audit/logs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit",
+                "logs"
+              ]
+            },
+            "description": "Consulta os logs de auditoria gerados automaticamente após criações na base principal."
           },
           "response": []
         }
@@ -307,6 +452,24 @@
           "response": []
         },
         {
+          "name": "Erro 404 - comissão inexistente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/comissoes/999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comissoes",
+                "999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Erro 404 - despesa inexistente",
           "request": {
             "method": "GET",
@@ -325,7 +488,7 @@
           "response": []
         },
         {
-          "name": "Erro 400 - combustível acima do limite",
+          "name": "Erro 400 - despesa inválida",
           "request": {
             "method": "POST",
             "header": [
@@ -336,7 +499,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"descricao\": \"Combustível para veículo oficial\",\n  \"valor\": 2500,\n  \"categoria\": \"COMBUSTIVEL\",\n  \"data\": \"2026-04-15\",\n  \"parlamentarId\": 1\n}"
+              "raw": "{\n  \"descricao\": \"\",\n  \"valor\": -10,\n  \"categoria\": \"TESTE\",\n  \"data\": \"abc\",\n  \"parlamentarId\": 0\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/despesas",
@@ -363,12 +526,16 @@
       "value": "1"
     },
     {
+      "key": "comissaoId",
+      "value": "1"
+    },
+    {
       "key": "despesaId",
       "value": "1"
     },
     {
       "key": "partido",
-      "value": "PT"
+      "value": "PSB"
     },
     {
       "key": "categoria",

@@ -1,6 +1,4 @@
-import { CategoriaDespesaEnum } from "src/core/enums/categoriasDespesas.enum";
-import { DespesaEntity } from "../entities/despesas.entity";
-
+import { CategoriaDespesaEnum } from 'src/core/enums/categoriasDespesas.enum';
 
 export class DespesaResponseDto {
   id: number;
@@ -8,14 +6,16 @@ export class DespesaResponseDto {
   valor: number;
   categoria: CategoriaDespesaEnum;
   data: string;
-  parlamentarId: number;
+  parlamentarId?: number;
+  parlamentarNome?: string;
 
-  constructor(despesa: DespesaEntity) {
+  constructor(despesa: any) {
     this.id = despesa.id;
     this.descricao = despesa.descricao;
-    this.valor = despesa.valor;
+    this.valor = Number(despesa.valor);
     this.categoria = despesa.categoria;
     this.data = despesa.data;
-    this.parlamentarId = despesa.parlamentarId;
+    this.parlamentarId = despesa.parlamentar?.id;
+    this.parlamentarNome = despesa.parlamentar?.nomeParlamentar;
   }
 }

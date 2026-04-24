@@ -1,27 +1,23 @@
-import { IsString, IsNotEmpty, IsNumber, IsEnum, IsInt } from "class-validator";
-import { ApiProperty } from "@nestjs/swagger";
-import { CategoriaDespesaEnum } from "src/core/enums/categoriasDespesas.enum";
+import { IsString, IsNotEmpty, IsNumber, IsEnum, IsInt, Min, MaxLength, IsDateString } from 'class-validator';
+import { CategoriaDespesaEnum } from 'src/core/enums/categoriasDespesas.enum';
 
 export class DespesasCreateDto {
-  @ApiProperty()
   @IsString()
   @IsNotEmpty()
+  @MaxLength(300)
   descricao: string;
 
-  @ApiProperty()
   @IsNumber()
+  @Min(0.01)
   valor: number;
 
-  @ApiProperty({ enum: CategoriaDespesaEnum })
   @IsEnum(CategoriaDespesaEnum)
   categoria: CategoriaDespesaEnum;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
+  @IsDateString()
   data: string;
 
-  @ApiProperty()
   @IsInt()
+  @Min(1)
   parlamentarId: number;
 }

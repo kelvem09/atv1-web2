@@ -1,6 +1,5 @@
-import { IsOptional, IsString, MaxLength, IsEnum, IsInt, Min } from "class-validator";
-import { PartidoEnum } from "src/core/enums/partidos.enum";
-
+import { IsOptional, IsString, MaxLength, IsEnum, IsInt, Min } from 'class-validator';
+import { PartidoEnum } from 'src/core/enums/partido.enum';
 
 export class ParlamentarUpdateDto {
   @IsOptional()

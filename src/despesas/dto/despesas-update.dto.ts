@@ -1,11 +1,10 @@
-import { IsOptional, IsString, MaxLength, IsNumber, Min, IsEnum, IsDateString, IsInt } from "class-validator";
-import { CategoriaDespesaEnum } from "src/core/enums/categoriasDespesas.enum";
-
+import { IsOptional, IsString, MaxLength, IsNumber, Min, IsEnum, IsDateString, IsInt } from 'class-validator';
+import { CategoriaDespesaEnum } from 'src/core/enums/categoriasDespesas.enum';
 
 export class DespesaUpdateDto {
   @IsOptional()
   @IsString()
-  @MaxLength(200)
+  @MaxLength(300)
   descricao?: string;
 
   @IsOptional()
